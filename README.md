@@ -149,6 +149,8 @@
 
 <img width="600" alt="image" src="https://github.com/ddoddii/mesher-server/assets/95014836/b2bcdd89-ce93-491a-9824-6c724b2dd27d">
 
+#### 예상 시나리오를 기반으로 테이블 인덱스
+
 ## 💭 시행착오
 
 #### 1. transactionReceipt 를 transactionHash 로 별도로 조회해서 transactionReceipt 정보를 별도로 저장할 것이라고 생각한 것
@@ -158,6 +160,10 @@ Block 과 Transaction Receipt 의 관계를 파악하고, TransactionReceipt Tab
 처음 생각할 때는, transactionReceipt 를 transactionHash 로 별도로 조회해서 transactionReceipt 정보를 별도로 저장할 것이라고 생각했습니다. 하지만, `provider.getTransactionReceipt(transactionHash)` 를 하고 이 transaction Receipt 정보를 데이터베이스에 저장하자, blockHash 에서 `type 'string' is not assignable to type 'never'.ts(2322)` 오류가 계속 났습니다. 생각해보니, 없는 값을 가져와서 FK 로 저장할 수 는 노릇이었습다.
 
 따라서, block 을 조회해서 저장할 때, 연쇄적으로 여기에 포함된 transactionReceipt, transactionReceipt 에 포함된 log 정보들을 저장하는 것으로 로직을 수정했습니다.
+
+#### 2. Log의 Index 를 어떤 것을 설정할까 ?
+
+Log 는 위의 block, transaction receipt과 다르게 해시 값이 없었습니다. index 는 전체에서 유일한 값이 아니라, 블럭 내에서 로그들끼리 식별할 수 있는 인덱스였습니다. 따라서 index 는 Log Table 내 유일한 값이 아니어서 단독 인덱스를 설정할 수 는 없었습니다. 그래서 유일한 값을 가질 것 같은 data를 인덱스로 할까 생각했지만, data 값이 유일하다는 보장도 없고, 길이도 너무 길었습니다. 따라서 [blockHash, Index] 두개의 칼럼을 multi-column index 로 지정했습니다.
 
 ## 🌱 회고
 
