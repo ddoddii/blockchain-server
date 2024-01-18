@@ -4,11 +4,11 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
 import { ConfigService } from '@nestjs/config';
+import { BlockDto } from 'src/block/dto';
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;
     let prisma: PrismaService;
-    let config: ConfigService;
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule],
@@ -26,15 +26,16 @@ describe('AppController (e2e)', () => {
         pactum.request.setBaseUrl('http://localhost:3334');
     });
 
-    afterAll(() => {
+    afterAll(async () => {
         app.close();
     });
 
-    describe('Ethers', () => {
+    describe('Block', () => {
+        // 최신 블럭 넘버 조회 테스트
         it('should return recent block number', () => {
             return pactum
                 .spec()
-                .get('/ethers/block_number')
+                .get('/block/block_number')
                 .expectStatus(200)
                 .expect((res) => {
                     console.log(res.res.body);
