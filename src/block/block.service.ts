@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { BlockDto, TransactionDto } from './dto';
 
 @Injectable()
-export class EthersService {
+export class BlockService {
     constructor(
         private prisma: PrismaService,
         private config: ConfigService,

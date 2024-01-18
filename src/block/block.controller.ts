@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { EthersService } from './block.service';
+import { BlockService } from './block.service';
 import { BlockDto, TransactionDto } from './dto';
 
 @Controller('ethers')
-export class EthersController {
-    constructor(private ethersService: EthersService) {}
+export class BlockController {
+    constructor(private ethersService: BlockService) {}
 
     @Get('block_number')
     getRecentBlockNumber() {

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
-import { EthersController } from './block/block.controller';
-import { EthersService } from './block/block.service';
+import { BlockController } from './block/block.controller';
+import { BlockService } from './block/block.service';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
     imports: [
@@ -12,8 +13,9 @@ import { PrismaModule } from './prisma/prisma.module';
             isGlobal: true,
         }),
         PrismaModule,
+        TransactionModule,
     ],
-    controllers: [EthersController],
-    providers: [AppService, EthersService, PrismaService],
+    controllers: [BlockController],
+    providers: [AppService, BlockService, PrismaService],
 })
 export class AppModule {}
