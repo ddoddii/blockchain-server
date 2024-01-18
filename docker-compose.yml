@@ -1,5 +1,11 @@
 version: '3.8'
 services:
+    app:
+        build: .
+        depends_on:
+            - mesher-db
+        ports:
+            - '3333:3333'
     mesher-db:
         image: postgres:13
         ports:
@@ -8,6 +14,8 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: 1234
             POSTGRES_DB: mesher
+        volumes:
+            - ./mesher-db-data:/var/lib/postgresql/data
         networks:
             - mesher
     test-db:
