@@ -15,12 +15,12 @@ export class BlockService {
     network = 'mainnet';
     provider = new ethers.InfuraProvider(this.network, this.INFURA_API);
 
-    // Returns the block number (or height) of the most recently mined block.
+    // 최신 블럭 넘버 조회
     async getRecentBlockNumber() {
         return this.provider.getBlockNumber();
     }
 
-    // Saves (block, transacation receipt, logs) and return block data
+    // (blockName | blockNumber | blockHash ) 기준으로 블럭 정보 조회 & 데이터베이스에 저장
     async retrieveEthersBlockData(dto: BlockDto) {
         const blockInfo = await this.provider.getBlock(dto.blockName);
         const blockData = {
@@ -48,7 +48,7 @@ export class BlockService {
         return JSON.stringify(blockInfo, null, 4);
     }
 
-    // Save Block Data
+    // 블럭 정보 저장
     async saveBlockData(blockData) {
         await this.prisma.block.create({
             data: {
@@ -57,7 +57,7 @@ export class BlockService {
         });
     }
 
-    // Save transaction Receipt Data in the block
+    // 블럭 내에 있는 Transaction Receipt 데이터 저장
     async saveTransactionReceiptData(blockData) {
         const transactionHashes = blockData.transactionHashes;
         transactionHashes.forEach(async (transactionHash, _, __) => {
@@ -81,12 +81,12 @@ export class BlockService {
                     ...transactionReceiptData,
                 },
             });
-            // Save logs in the transactionReceipt
+            // Transaction Receipt 내에 있는 Logs 저장
             this.saveTransactionReceiptLogs(transactionReceipt);
         });
     }
 
-    // Save logs
+    // Logs 저장
     async saveTransactionReceiptLogs(transactionReceipt) {
         const logs = transactionReceipt.logs;
 
@@ -110,7 +110,7 @@ export class BlockService {
         }
     }
 
-    // Return Block Data with transaction recipts, logs based on Block Hash
+    // 블럭해시 기준으로 블럭 조회 (TransactionReceipt, Log 포함)
     async getBlockData(blockHash: string) {
         const blockData = await this.prisma.block.findUnique({
             where: {
