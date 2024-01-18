@@ -37,7 +37,7 @@ export class BlockService {
         };
         try {
             await this.saveBlockData(blockData);
-            await this.saveTransactionReceiptData(blockData);
+            await this.saveTransactionReceiptData(blockInfo);
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
@@ -58,8 +58,8 @@ export class BlockService {
     }
 
     // 블럭 내에 있는 Transaction Receipt 데이터 저장
-    async saveTransactionReceiptData(blockData) {
-        const transactionHashes = blockData.transactionHashes;
+    async saveTransactionReceiptData(blockInfo) {
+        const transactionHashes = blockInfo.transactions;
         transactionHashes.forEach(async (transactionHash, _, __) => {
             const transactionReceipt =
                 await this.provider.getTransactionReceipt(transactionHash);

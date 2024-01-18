@@ -21,7 +21,7 @@ export class BlockController {
     @ApiResponse({
         status: 201,
         description:
-            '(blockName or blockNumber or blockHash ) 기준으로 블럭 정보 조회 성공',
+            '(blockName or blockNumber or blockHash ) 기준으로 블럭 정보 조회 & 데이터베이스에 저장 성공',
     })
     @Post('info')
     retrieveEthersBlockData(@Body() dto: BlockDto) {
