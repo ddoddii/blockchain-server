@@ -65,13 +65,13 @@
 -   Docker
 -   PostgreSQL
 
-#### Coding Convention
+### Coding Convention
 
 -   [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 
 ## 📦 Database Schema
 
-#### 저장해야 하는 정보
+### 저장해야 하는 정보
 
 -   필요한 블록체인 데이터 구조는 ethers.js의 **Block(with transaction hashes), TransactionReceipt, Log**
 
@@ -146,19 +146,19 @@
 -   transaction - log : one - many
     -   Each transaction on the blockchain can generate zero or more logs. These logs are emitted by smart contracts during the execution of a transaction and are included in the transaction receipt. Logs are used to record events and other information, such as state changes or important occurrences during the execution of a smart contract.
 
-#### ERD Table
+### ERD Table
 
 <img width="600" alt="image" src="https://github.com/ddoddii/mesher-server/assets/95014836/b2bcdd89-ce93-491a-9824-6c724b2dd27d">
 
 ## 💭 시행착오와 고민
 
-#### 1. 어떠한 데이터베이스를 선택할 것인가 ?
+### 1. 어떠한 데이터베이스를 선택할 것인가 ?
 
 전통적인 관계형 데이터베이스를 사용할지, 비관계형 데이터베이스를 사용하여 데이터를 저장할 지 고민했습니다. 사실 본 프로젝트에서는 테이블간의 join 이 많이 없고, key-value 값으로 저장하는 NoSQL 의 강점도 분명히 있었습니다. 하지만 RDBMS 는 데이터 무결성을 보장하고, 데이터가 중복되지 않음을 보장하는 반면 NoSQL 은 데이터 중복을 계속 업데이트 해야 합니다. 유일한 값인 해시 값으로 조회를 많이 하는 현재 상황에서, 중복 없이 Block / Transaction Receipt / Log 를 저장하는 RDBMS 가 더 강점이 있다고 생각했습다.
 
 그렇다면 RDBMS 중에서도 어떤 데이터베이스를 선택할지 고민이었습다. 우선 후보는 MySQL 과 PostgreSQL 이었습다. 블럭 정보를 저장할 때 쓰기 연산이 굉장히 많이 사용됩니다. 이때 쓰기 작업에 더 강점을 가진 것이 PostgreSQL 입니다. 또 , PostgreSQL 는 객체 관계형 데이터베이스 관리 시스템(ORDBMS) 으로, 관계형 데이터베이스 시스템과 객체 지향 데이터베이스 시스템의 특징을 결합한 DBMS 입니다. 이때 데이터는 객체로 저장되어 객체 간의 관계를 중심으로 작동합니다. 또한 개발하는 본인이 스스로 데이터형과 메서드를 자유롭게 설정할 수 있습니다. 단순 읽기 성능에는 MySQL 이 우위에 있지만, 위의 이유들을 종합적으로 고려하여 결국 **PostgreSQL** 로 결정하였습니다.
 
-#### 2. transactionReceipt 를 transactionHash 로 별도로 조회해서 transactionReceipt 정보를 별도로 저장하면 안되나 ?
+### 2. transactionReceipt 를 transactionHash 로 별도로 조회해서 transactionReceipt 정보를 별도로 저장하면 안되나 ?
 
 Block 과 Transaction Receipt 의 관계를 파악하고, TransactionReceipt Table 의 FK 로 blockHash (Block 의 PK 인 Hash) 로 설정했습니다.
 
@@ -166,13 +166,13 @@ Block 과 Transaction Receipt 의 관계를 파악하고, TransactionReceipt Tab
 
 따라서, block 을 조회해서 저장할 때, 연쇄적으로 여기에 포함된 transactionReceipt, transactionReceipt 에 포함된 log 정보들을 저장하는 것으로 로직을 수정했습니다.
 
-#### 3. Log의 Index 를 어떤 것을 설정할까 ?
+### 3. Log의 Index 를 어떤 것을 설정할까 ?
 
 Log 는 위의 block, transaction receipt과 다르게 해시 값이 없었습니다. index 는 전체에서 유일한 값이 아니라, 블럭 내에서 로그들끼리 식별할 수 있는 인덱스였습니다. 따라서 index 는 Log Table 내 유일한 값이 아니어서 단독 인덱스를 설정할 수 는 없었습니다. 그래서 유일한 값을 가질 것 같은 data를 인덱스로 할까 생각했지만, data 값이 유일하다는 보장도 없고, 길이도 너무 길었습니다. 따라서 [blockHash, Index] 두개의 칼럼을 multi-column index 로 지정했습니다.
 
 ## 🌱 회고
 
-#### 시간만 조금 더 있었다면 ...
+### 시간만 조금 더 있었다면 ...
 
 본 프로젝트는 48시간이라는 시간 제한이 있는 프로젝트입니다. 또한, 블록체인에 대한 사전 정보가 부족한 상태에서 시작하다보니 첫날에는 블럭체인 도메인에 대한 이해를 하는데 많은 시간을 사용했습니다.
 
@@ -186,7 +186,7 @@ Docker Compose 를 이용해 dev DB, test DB 까지 분리했지만 시간의 �
 
 하루만 더 주어진다면, 슬랙 봇도 만들고, Docker와 관련된 여러 설정들을 세팅해서 더 완성된 결과물을 만들었을 수 있을텐데 아쉽습니다.
 
-#### 그럼에도 48시간 동안 내가 할 수 있는 최선을 하지 않았나
+### 그럼에도 48시간 동안 내가 할 수 있는 최선을 하지 않았나
 
 그럼에도 저는 제가 48시간 동안 내가 할 수 있는 최선을 했습니다. 첫날에도 새벽 4시에 자고, 현재 마지막 문서를 작성하고 있는 시각은 어느덧 새벽 3시를 향해가네요.
 
