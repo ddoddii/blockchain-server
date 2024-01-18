@@ -150,8 +150,6 @@
 
 <img width="600" alt="image" src="https://github.com/ddoddii/mesher-server/assets/95014836/b2bcdd89-ce93-491a-9824-6c724b2dd27d">
 
-#### 예상 시나리오를 기반으로 테이블 인덱스
-
 ## 💭 시행착오와 고민
 
 #### 1. 어떠한 데이터베이스를 선택할 것인가 ?
