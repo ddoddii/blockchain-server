@@ -18,35 +18,45 @@ export class TransactionService {
     network = 'mainnet';
     provider = new ethers.InfuraProvider(this.network, this.INFURA_API);
 
-    // Returns the transaction Hash for BlockHash
-    async getTransactionHashByBlockHash(blockHash: string) {
-        const transactionHashesForBlock = await this.prisma.block.findUnique({
-            where: {
-                hash: blockHash,
-            },
-            include: {
-                TransactionReceipt: {
-                    select: {
-                        transactionHash: true,
-                    },
+    // Transaction Hash 기준으로 Transaction Receipt (Logs 포함) 조회
+    async getTransactionReceiptByTransactionHash(transactionHash: string) {
+        const transactionReceipt =
+            await this.prisma.transactionReceipt.findUnique({
+                where: {
+                    transactionHash: transactionHash,
                 },
-            },
-        });
-        return transactionHashesForBlock.TransactionReceipt.map(
-            (tr) => tr.transactionHash,
-        );
+                include: {
+                    Log: true,
+                },
+            });
+        return transactionReceipt;
     }
 
-    // Returns the transaction receipt for BlockHash
-    async getTransactionReceiptByBlockHash(blockHash: string) {
-        const transactionReceiptsForBlock = await this.prisma.block.findUnique({
-            where: {
-                hash: blockHash,
-            },
-            include: {
-                TransactionReceipt: true,
-            },
-        });
-        return transactionReceiptsForBlock.TransactionReceipt;
+    // from 기준으로 Transaction Receipt (Logs 포함) 조회
+    async getTransactionReceiptByFromAddress(fromAddress: string) {
+        const transactionReceipt =
+            await this.prisma.transactionReceipt.findMany({
+                where: {
+                    from: fromAddress,
+                },
+                include: {
+                    Log: true,
+                },
+            });
+        return transactionReceipt;
+    }
+
+    // to 기준으로 Transaction Receipt (Logs 포함) 조회
+    async getTransactionReceiptByToAddress(toAddress: string) {
+        const transactionReceipt =
+            await this.prisma.transactionReceipt.findMany({
+                where: {
+                    to: toAddress,
+                },
+                include: {
+                    Log: true,
+                },
+            });
+        return transactionReceipt;
     }
 }
