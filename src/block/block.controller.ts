@@ -1,23 +1,23 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { BlockService } from './block.service';
-import { BlockDto, TransactionDto } from './dto';
+import { BlockDto } from './dto';
 
-@Controller('ethers')
+@Controller('block')
 export class BlockController {
-    constructor(private ethersService: BlockService) {}
+    constructor(private blockService: BlockService) {}
 
     @Get('block_number')
     getRecentBlockNumber() {
-        return this.ethersService.getRecentBlockNumber();
+        return this.blockService.getRecentBlockNumber();
     }
 
-    @Post('block')
+    @Post('info')
     retrieveEthersBlockData(@Body() dto: BlockDto) {
-        return this.ethersService.retrieveEthersBlockData(dto);
+        return this.blockService.retrieveEthersBlockData(dto);
     }
 
-    @Post('transaction_receipt')
-    getTransactionReceiptByHash(@Body() dto: TransactionDto) {
-        return this.ethersService.getTransactionReceiptByHash(dto);
+    @Get(':blockHash')
+    getBlockDataOnBlockHash(@Param('blockHash') blockHash: string) {
+        return this.blockService.getBlockData(blockHash);
     }
 }
