@@ -4,34 +4,35 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Block {
-  hash                String               @id @db.Char(64)
-  parentHash          String               @db.Char(64)
+  hash                String               @id @db.Char(66)
+  parentHash          String               @db.Char(66)
   number              BigInt
   timestamp           BigInt
   nonce               String               @db.Char(64)
-  difficulty          Decimal?
-  extendedDifficulty  Decimal?
-  gasLimit            Decimal
-  gasUsed             Decimal
+  difficulty          BigInt?
+  extendedDifficulty  BigInt?
+  gasLimit            BigInt
+  gasUsed             BigInt
   miner               String               @db.Char(42)
   extraData           String?
+  transactionHashes   String[]             @db.Char(66)
   TransactionReceipts TransactionReceipt[] @relation("BlockTransactionReceipt")
   Logs                Log[]                @relation("BlockLog")
 }
 
 model TransactionReceipt {
-  transactionHash   String   @id @db.Char(64)
-  blockHash         String   @db.Char(64)
+  transactionHash   String   @id @db.Char(66)
+  blockHash         String   @db.Char(66)
   to                String   @db.Char(42)
   from              String   @db.Char(42)
   contractAddress   String   @db.Char(42)
   transactionIndex  Int
   type              Int      @db.SmallInt
-  root              String?  @db.VarChar(64)
+  root              String?  @db.VarChar(66)
   gasUsed           Decimal
   effectiveGasPrice Decimal
   logsBloom         String?  @db.Char(512)
@@ -42,15 +43,18 @@ model TransactionReceipt {
   status            Int      @db.SmallInt // Only allows 0, 1
   Block             Block    @relation("BlockTransactionReceipt", fields: [blockHash], references: [hash])
   Logs              Log[]    @relation("TransactionReceiptLog")
+
+  @@index([from])
+  @@index([to])
 }
 
 model Log {
-  transactionHash    String             @id @db.Char(64)
-  blockHash          String             @db.Char(64)
+  transactionHash    String             @id @db.Char(66)
+  blockHash          String             @db.Char(66)
   removed            Boolean?
   address            String             @db.Char(42)
   data               String?
-  topics             String[]           @db.Char(64)
+  topics             String[]           @db.Char(66)
   transactionIndex   Int
   logIndex           Int
   Block              Block              @relation("BlockLog", fields: [blockHash], references: [hash])
