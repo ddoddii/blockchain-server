@@ -1,0 +1,128 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/block/block_number": {
+            "get": {
+                "operationId": "getRecentBlockNumber",
+                "parameters": [],
+                "responses": {
+                    "200": { "description": "최신 블럭 넘버 조회 성공" }
+                }
+            }
+        },
+        "/block/info": {
+            "post": {
+                "operationId": "retrieveEthersBlockData",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BlockDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "(blockName or blockNumber or blockHash ) 기준으로 블럭 정보 조회 성공"
+                    }
+                }
+            }
+        },
+        "/block/{blockHash}": {
+            "get": {
+                "operationId": "getBlockDataOnBlockHash",
+                "parameters": [
+                    {
+                        "name": "blockHash",
+                        "required": true,
+                        "in": "path",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "블럭 해시 기준으로 블럭 정보 조회 성공"
+                    }
+                }
+            }
+        },
+        "/transaction/hash/{transactionHash}": {
+            "get": {
+                "operationId": "getTransactionReceiptByTransactionHash",
+                "parameters": [
+                    {
+                        "name": "transactionHash",
+                        "required": true,
+                        "in": "path",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction Hash 기준으로 Transaction Receipt 조회 성공"
+                    }
+                }
+            }
+        },
+        "/transaction/from/{fromAddress}": {
+            "get": {
+                "operationId": "getTransactionReceiptByFromAddress",
+                "parameters": [
+                    {
+                        "name": "fromAddress",
+                        "required": true,
+                        "in": "path",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "From Address 기준으로 Transaction Receipt 조회 성공"
+                    }
+                }
+            }
+        },
+        "/transaction/to/{toAddress}": {
+            "get": {
+                "operationId": "getTransactionReceiptByToAddress",
+                "parameters": [
+                    {
+                        "name": "toAddress",
+                        "required": true,
+                        "in": "path",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "To Address 기준으로 Transaction Receipt 조회 성공"
+                    }
+                }
+            }
+        }
+    },
+    "info": {
+        "title": "Mesher-Server",
+        "description": "Storing Blockchain Data",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "BlockDto": {
+                "type": "object",
+                "properties": {
+                    "blockName": { "type": "string" },
+                    "blockHash": { "type": "number" },
+                    "blockNumber": { "type": "number" }
+                },
+                "required": ["blockHash"]
+            }
+        }
+    }
+}
