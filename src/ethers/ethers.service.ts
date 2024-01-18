@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { InfuraProvider, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { ConfigService } from '@nestjs/config';
 import { BlockDto, TransactionDto } from './dto';
 
@@ -19,9 +19,28 @@ export class EthersService {
         return this.provider.getBlockNumber();
     }
 
-    async getEthersBlockData(dto: BlockDto) {
-        const blockinfo = await this.provider.getBlock(dto.blockName);
-        return JSON.stringify(blockinfo, null, 4);
+    // Saves block data
+    async retrieveEthersBlockData(dto: BlockDto) {
+        const blockInfo = await this.provider.getBlock(dto.blockName);
+        const blockData = {
+            hash: blockInfo.hash,
+            parentHash: blockInfo.parentHash,
+            number: BigInt(blockInfo.number),
+            timestamp: BigInt(blockInfo.timestamp),
+            nonce: blockInfo.nonce,
+            difficulty: blockInfo.difficulty,
+            gasLimit: BigInt(blockInfo.gasLimit),
+            gasUsed: BigInt(blockInfo.gasUsed),
+            miner: blockInfo.miner,
+            extraData: blockInfo.extraData,
+            transactionHashes: [...blockInfo.transactions],
+        };
+        await this.prisma.block.create({
+            data: {
+                ...blockData,
+            },
+        });
+        return JSON.stringify(blockInfo, null, 4);
     }
 
     // Returns the transaction receipt for hash or null if the transaction has not been mined.

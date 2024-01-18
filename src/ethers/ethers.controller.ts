@@ -13,7 +13,7 @@ export class EthersController {
 
     @Post('block')
     retrieveEthersBlockData(@Body() dto: BlockDto) {
-        return this.ethersService.getEthersBlockData(dto);
+        return this.ethersService.retrieveEthersBlockData(dto);
     }
 
     @Post('transaction_receipt')
