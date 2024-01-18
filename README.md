@@ -23,8 +23,8 @@
 ## ✨ How To Run
 
 1. `.env` 파일 생성 후 본인의 Infura API Key (`INFURA_API`) 저장
-2. `docker build -t <이미지 이름> .`
-3. `docker run -d -p 3333:3333 <이미지 이름>`
+2. `docker pull soeunuhm/mesher-server:latest`
+3. `docker run -d -p 3333:3333 --env-file ./.env soeunuhm/mesher-server:latest`
 
 ## 🚀 Action Plan
 
