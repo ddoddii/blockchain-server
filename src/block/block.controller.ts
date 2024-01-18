@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { EthersService } from './ethers.service';
+import { EthersService } from './block.service';
 import { BlockDto, TransactionDto } from './dto';
 
 @Controller('ethers')

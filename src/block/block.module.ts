@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { EthersController } from './ethers.controller';
-import { EthersService } from './ethers.service';
+import { EthersController } from './block.controller';
+import { EthersService } from './block.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
