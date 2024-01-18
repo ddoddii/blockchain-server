@@ -8,55 +8,55 @@ datasource db {
 }
 
 model Block {
-  hash                String               @id @db.Char(66)
-  parentHash          String               @db.Char(66)
-  number              BigInt
-  timestamp           BigInt
-  nonce               String               @db.Char(64)
-  difficulty          BigInt?
-  extendedDifficulty  BigInt?
-  gasLimit            BigInt
-  gasUsed             BigInt
-  miner               String               @db.Char(42)
-  extraData           String?
-  transactionHashes   String[]             @db.Char(66)
-  TransactionReceipts TransactionReceipt[] @relation("BlockTransactionReceipt")
-  Logs                Log[]                @relation("BlockLog")
+  hash               String               @id @db.Char(66)
+  parentHash         String               @db.Char(66)
+  number             Int
+  timestamp          BigInt
+  nonce              String               @db.Char(64)
+  difficulty         BigInt?
+  extendedDifficulty BigInt?
+  gasLimit           BigInt
+  gasUsed            BigInt
+  miner              String               @db.Char(42)
+  extraData          String?
+  TransactionReceipt TransactionReceipt[] @relation()
 }
 
 model TransactionReceipt {
   transactionHash   String   @id @db.Char(66)
   blockHash         String   @db.Char(66)
-  to                String   @db.Char(42)
+  blockNumber       Int
+  to                String?  @db.Char(42)
   from              String   @db.Char(42)
-  contractAddress   String   @db.Char(42)
+  contractAddress   String?
   transactionIndex  Int
-  type              Int      @db.SmallInt
+  type              Int?     @db.SmallInt
   root              String?  @db.VarChar(66)
-  gasUsed           Decimal
-  effectiveGasPrice Decimal
-  logsBloom         String?  @db.Char(512)
-  blockNumber       BigInt
-  confirmations     BigInt
-  cumulativeGasUsed Decimal?
+  gasUsed           BigInt
+  effectiveGasPrice BigInt?
+  logsBloom         String?  @db.Char(514)
+  confirmations     BigInt?
+  cumulativeGasUsed BigInt?
   byzantium         Boolean? @default(false)
   status            Int      @db.SmallInt // Only allows 0, 1
-  Block             Block    @relation("BlockTransactionReceipt", fields: [blockHash], references: [hash])
-  Logs              Log[]    @relation("TransactionReceiptLog")
+  Log               Log[]    @relation("TransactionReceiptLog")
+  Block             Block    @relation(fields: [blockHash], references: [hash])
 
   @@index([from])
   @@index([to])
 }
 
 model Log {
-  transactionHash    String             @id @db.Char(66)
+  transactionHash    String             @db.Char(66)
   blockHash          String             @db.Char(66)
+  blockNumber        Int
   removed            Boolean?
   address            String             @db.Char(42)
   data               String?
   topics             String[]           @db.Char(66)
   transactionIndex   Int
   logIndex           Int
-  Block              Block              @relation("BlockLog", fields: [blockHash], references: [hash])
-  TransactionReceipt TransactionReceipt @relation("TransactionReceiptLog", fields: [transactionHash], references: [transactionHash])
+  TransactionReceipt TransactionReceipt? @relation("TransactionReceiptLog", fields: [transactionHash], references: [transactionHash])
+
+  @@id([blockHash, logIndex])
 }
