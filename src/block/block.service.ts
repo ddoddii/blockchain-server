@@ -22,7 +22,7 @@ export class BlockService {
 
     // (blockName | blockNumber | blockHash ) 기준으로 블럭 정보 조회 & 데이터베이스에 저장
     async retrieveEthersBlockData(dto: BlockDto) {
-        const blockInfo = await this.provider.getBlock(dto.blockName);
+        const blockInfo = await this.provider.getBlock(dto.blockHash);
         const blockData = {
             hash: blockInfo.hash,
             parentHash: blockInfo.parentHash,
