@@ -1,4 +1,15 @@
-# ⛓️ Nest Server for storing latest Blockchain data
+# Nest Server for storing latest Blockchain data
+
+## Table of Contents
+
+1. [👋 About](#👋-about)
+2. [✨ How To Run](#✨-how-to-run)
+3. [🚀 Action Plan](#🚀-action-plan)
+4. [📚 Project Stack](#📚-project-stack)
+5. [📦 Database Schema](#📦-database-schema)
+6. [💭 시행착오](#💭-시행착오)
+7. [🌱 회고](#🌱-회고)
+8. [🔎 참고한 자료](#🔎-참고한-자료)
 
 ## 👋 About
 
@@ -14,6 +25,37 @@
 1. `.env` 파일 생성 후 본인의 Infura API Key (`INFURA_API`) 저장
 2. `docker pull soeunuhm/mesher-server:latest`
 3. `docker run -d -p 3333:3333 --env-file ./.env soeunuhm/mesher-server:latest`
+
+## 🚀 Action Plan
+
+<details>
+<summary>Day 1</summary>
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+-   [x] 블럭체인 용어 정리
+-   [x] Nest Js 튜토리얼
+-   [x] Ether.js 공식문서 읽어보기
+-   [x] 데이터베이스 스키마 설계
+
+</details>
+
+<details>
+<summary>Day 2</summary>
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+-   [x] 최신 블록체인 정보 데이터베이스 저장
+-   [x] API Endpoint 설계
+-   [x] OpenAPI Swagger 문서
+-   [x] Dockerizing
+-   [x] readme / 회고 작성
+-   [ ] test code 작성
+-   [ ] AWS 배포
+-   [ ] Github Actions 를 활용한 CI/CD 자동화
+-   [ ] 슬랙 봇 만들기
+
+</details>
 
 ## 📚 Project Stack
 
@@ -142,7 +184,13 @@ Docker Compose 를 이용해 dev DB, test DB 까지 분리했지만 시간의 �
 
 또한, 원래 계획으로는 AWS EC2 를 사용하여 배포도 하고, Github actions 를 활용하여 CI/CD 도 적용할 계획이었으나 시간 부족으로 실행하지 못했습니다.
 
-하루만 더 주어진다면, 슬랙 봇도 만들고, Docker와 관련된 여러 설정들을 세팅해서 더 완성된 결과물을 만들었을 수 있을텐데 아쉬움이 남네요.
+하루만 더 주어진다면, 슬랙 봇도 만들고, Docker와 관련된 여러 설정들을 세팅해서 더 완성된 결과물을 만들었을 수 있을텐데 아쉽습니다.
+
+### 그럼에도 48시간 동안 최선을 다하지 않았나
+
+NestJs, Prisma, EthersJs 공식문서가 자세하게 잘 나와있던 덕분에 빠르게 학습할 수 있었습니다. 또 블럭체인이라는 새로운 분야에 대해 공부하며 재미있었습니다. 특히 [‘웹3-블록체인-토큰-메타버스-VR·AR’ 완벽한 위계정리 (김지현 SK 부사장)](https://www.youtube.com/watch?v=ZUzIHjTs2dA&pp=ygUM67iU65-t7LK07J24 '‘웹3-블록체인-토큰-메타버스-VR·AR’ 완벽한 위계정리 (김지현 SK 부사장)') 영상을 보며 앞으로 어떤 형태의 web 이 생길지, 블럭체인이 새로운 형태의 web 에 어떻게 기술적 근간이 될 수 있는지 새로운 시각을 배울 수 있었습니다.
+
+새로운 것을 공부하는 것은 세상을 보는 해상도를 높이는 것이라고 생각합니다. 이런 좋은 경험을 할 수 있게 해준 [@Mesher](https://mesher.io/) 에게도 감사한 말씀을 전합니다.
 
 ## 🔎 참고한 자료
 
